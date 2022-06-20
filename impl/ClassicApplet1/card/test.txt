@@ -1,0 +1,63 @@
+// test my applet
+establish_context
+enable_trace
+enable_timer
+card_connect
+// select
+send_apdu -sc 0 -APDU 00A40400080102030405060809
+//say my name (00)
+send_apdu -sc 0 -APDU 8000000008;
+
+//encrypt a sign
+send_apdu -sc 0 -APDU 80420000100102030405060708091011121314151620
+
+//decrypt and verify
+send_apdu -sc 0 -APDU 80440000207d3fe810138e357cbc735a1eeb4ffb40e7acbe9befb27516f214647fb25fab5d10;
+
+//encrypt wrong data length
+send_apdu -sc 0 -APDU 8042000011010203040506070809101112131415161720;
+
+//decrypt tampered data
+send_apdu -sc 0 -APDU 80440000207d3fe810141e357cbc735a1eeb4ffb40e7acbe9befb27516f214647fb25fab5d10;
+
+//decrypt with wrong mac code
+send_apdu -sc 0 -APDU 80440000207d3fe810138e357cbc735a1eeb4ffb40e7acbe9befb27516f214647fb35fab5d10;
+
+
+//too much data
+send_apdu -sc 0 -APDU 8001000015010203040501020304050102030405010203040501;
+
+
+//read data (01)
+send_apdu -sc 0 -APDU 80010000050102030405;
+
+//send data
+send_apdu -sc 0 -APDU 8002000005;
+
+
+//verify pin
+send_apdu -sc 0 -APDU 802000000401020304;
+
+//too much data
+send_apdu -sc 0 -APDU 8001000015010203040501020304050102030405010203040501;
+
+
+//read data (01)
+send_apdu -sc 0 -APDU 80010000050102030405;
+
+//send data
+send_apdu -sc 0 -APDU 8002000005;
+
+//enter wrong pin three times
+send_apdu -sc 0 -APDU 802000000401020306;
+send_apdu -sc 0 -APDU 802000000401020306;
+send_apdu -sc 0 -APDU 802000000401020306;
+
+//try if card is blocked
+send_apdu -sc 0 -APDU 8000000008;
+
+
+
+card_disconnect
+release_context
+
